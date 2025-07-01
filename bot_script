@@ -1,0 +1,21 @@
+const closeButton = document.querySelector(CONFIG.SELECTORS.CLOSE_BUTTON);
+            if (closeButton) {
+                closeButton.click();
+                log("Попап закрыт.");
+            } else {
+                log("Кнопка закрытия попапа не найдена.", 'warn');
+            }
+
+            try {
+                log("Проверка наличия таймера #time_remaining...");
+                await waitForVisibleElement(CONFIG.SELECTORS.TIMER, CONFIG.DELAYS.WAIT_FOR_TIMER, CONFIG.DELAYS.MAX_TIMER_CHECK_ATTEMPTS);
+                log("Таймер найден. Продолжаем выполнение.");
+            } catch (timerError) {
+                log("Таймер не найден. Перезагружаем страницу...", 'error');
+                location.reload();
+                return;
+            }
+
+            const waitBeforeRepeat = random(CONFIG.DELAYS.AFTER_CLOSE.min, CONFIG.DELAYS.AFTER_CLOSE.max);
+            log(`Ожидание ${waitBeforeRepeat} секунд перед следующим запуском.`);
+            setTimeout(runAutomation, waitBeforeRepeat * 1000);
